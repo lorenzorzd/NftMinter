@@ -2,25 +2,9 @@ import { useEffect, useState } from "react";
 import {
   connectWallet,
   getCurrentWalletConnected,
-  mintNFT,
-} from "./util/interact.js";
-
+  mintNFT
+} from "./utils/interact.js";
 const Minter = (props) => {
-  const [walletAddress, setWallet] = useState("");
-  const [status, setStatus] = useState("");
-
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [url, setURL] = useState("");
-
-  useEffect(async () => {
-    const { address, status } = await getCurrentWalletConnected();
-
-    setWallet(address);
-    setStatus(status);
-
-    addWalletListener();
-  }, []);
 
   function addWalletListener() {
     if (window.ethereum) {
@@ -47,22 +31,32 @@ const Minter = (props) => {
     }
   }
 
-  const connectWalletPressed = async () => {
+  //State variables
+  const [walletAddress, setWallet] = useState("");
+  const [status, setStatus] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [url, setURL] = useState("");
+ 
+  useEffect(async () => { //TODO: implement
+    const {address, status} = await getCurrentWalletConnected();
+    setWallet(address)
+    setStatus(status);
+
+    addWalletListener();
+  }, []);
+
+  const connectWalletPressed = async () => { //TODO: implement
     const walletResponse = await connectWallet();
     setStatus(walletResponse.status);
-    setWallet(walletResponse.address);
+    setStatus(walletResponse.address);
   };
 
-  const onMintPressed = async () => {
-    const { success, status } = await mintNFT(url, name, description);
+  const onMintPressed = async () => { //TODO: implement
+    const { status } = await mintNFT(url, name, description);
     setStatus(status);
-    if (success) {
-      setName("");
-      setDescription("");
-      setURL("");
-    }
   };
-
+  
   return (
     <div className="Minter">
       <button id="walletButton" onClick={connectWalletPressed}>
@@ -104,7 +98,7 @@ const Minter = (props) => {
       <button id="mintButton" onClick={onMintPressed}>
         Mint NFT
       </button>
-      <p id="status" style={{ color: "red" }}>
+      <p id="status">
         {status}
       </p>
     </div>
